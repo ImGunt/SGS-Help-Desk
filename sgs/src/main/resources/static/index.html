@@ -1,0 +1,951 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SGS • Sistema de Help Desk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* ===== VARIÁVEIS CSS ===== */
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --muted: #64748b;
+      --text: #e5e7eb;
+      --acc: #22c55e;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --info: #3b82f6;
+      --border: #1f2937;
+      --input-bg: #0a1221;
+      --input-border: #334155;
+    }
+
+    /* ===== RESET E BASE ===== */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: linear-gradient(180deg, #0b1220, #0f172a 30%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: #0f172af2;
+      backdrop-filter: blur(6px);
+      z-index: 100;
+    }
+
+    h1 {
+      font-size: 18px;
+      margin: 0;
+      letter-spacing: .3px;
+    }
+
+    .tag {
+      padding: 4px 8px;
+      background: #052e1a;
+      color: #86efac;
+      border: 1px solid #14532d;
+      border-radius: 999px;
+      font-size: 12px;
+    }
+
+    /* ===== NAVEGAÇÃO ===== */
+    .nav {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .nav-btn {
+      padding: 8px 16px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      background: var(--border);
+    }
+
+    .nav-btn.active {
+      background: var(--acc);
+      color: #052e1a;
+      border-color: var(--acc);
+    }
+
+    /* ===== LAYOUT PRINCIPAL ===== */
+    main {
+      max-width: 1200px;
+      margin: 24px auto;
+      padding: 0 16px 80px;
+    }
+
+    .card {
+      background: #0b1324;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, .25);
+      margin-bottom: 20px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: 1fr;
+    }
+
+    @media (min-width: 860px) {
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* ===== FORMULÁRIOS ===== */
+    label {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--input-border);
+      background: var(--input-bg);
+      color: var(--text);
+      outline: none;
+      font-size: 14px;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, .2);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    /* ===== BOTÕES ===== */
+    button {
+      appearance: none;
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    .btn {
+      background: #1f2937;
+      color: #e5e7eb;
+    }
+
+    .btn:hover {
+      background: #374151;
+    }
+
+    .btn-primary {
+      background: var(--acc);
+      color: #052e1a;
+    }
+
+    .btn-primary:hover {
+      filter: brightness(0.95);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .btn-warning {
+      background: var(--warning);
+      color: #451a03;
+    }
+
+    .btn-info {
+      background: var(--info);
+      color: white;
+    }
+
+    /* ===== TABELA ===== */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      color: #9ca3af;
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+    }
+
+    /* ===== STATUS BADGES ===== */
+    .status-badge {
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .status-aberto { background: #dc2626; color: white; }
+    .status-em-andamento { background: #f59e0b; color: #451a03; }
+    .status-resolvido { background: #16a34a; color: white; }
+    .status-fechado { background: #6b7280; color: white; }
+
+    .prioridade-alta { background: #dc2626; color: white; }
+    .prioridade-media { background: #f59e0b; color: #451a03; }
+    .prioridade-baixa { background: #16a34a; color: white; }
+
+    /* ===== COMPONENTES ===== */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .status {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    .toast {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      padding: 12px 14px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .35);
+      display: none;
+      z-index: 1000;
+    }
+
+    .empty {
+      border: 1px dashed var(--input-border);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      color: #94a3b8;
+    }
+
+    .muted {
+      color: #94a3b8;
+    }
+
+    .pill {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--input-border);
+      color: #cbd5e1;
+    }
+
+    .footer {
+      margin-top: 16px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    a {
+      color: #93c5fd;
+    }
+
+    /* ===== DASHBOARD ===== */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--acc);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ===== RESPONSIVO ===== */
+    @media (max-width: 768px) {
+      .nav {
+        flex-wrap: wrap;
+      }
+      
+      .toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>SGS • Sistema de Help Desk</h1>
+  </header>
+  <main>
+    <!-- Navegação -->
+    <div class="nav">
+      <button class="nav-btn active" onclick="showSection('dashboard')">Dashboard</button>
+      <button class="nav-btn" onclick="showSection('clientes')">Clientes</button>
+      <button class="nav-btn" onclick="showSection('tecnicos')">Técnicos</button>
+      <button class="nav-btn" onclick="showSection('ordens')">Ordens de Serviço</button>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="section">
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-number" id="totalClientes">-</div>
+          <div class="stat-label">Total de Clientes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="totalTecnicos">-</div>
+          <div class="stat-label">Técnicos Ativos</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="ordensAbertas">-</div>
+          <div class="stat-label">Ordens Abertas</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="ordensResolvidas">-</div>
+          <div class="stat-label">Ordens Resolvidas</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Últimas Ordens de Serviço</h3>
+        <div id="ultimasOrdens" class="empty">Carregando...</div>
+      </div>
+    </div>
+
+    <!-- Clientes -->
+    <div id="clientes" class="section" style="display:none">
+      <div class="grid">
+        <div class="card">
+          <div class="toolbar">
+            <h3>Lista de Clientes</h3>
+            <div class="status" id="statusClientes">Pronto</div>
+          </div>
+          <div id="clientesTableWrap">
+            <table id="clientesTable">
+              <thead>
+                <tr><th>ID</th><th>Nome</th><th>Email</th><th>Ações</th></tr>
+              </thead>
+              <tbody id="clientesBody">
+                <tr><td colspan="4" class="empty">Carregando...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Novo Cliente</h3>
+          <form id="clienteForm">
+            <div style="margin-bottom:12px">
+              <label for="nome">Nome</label>
+              <input id="nome" name="nome" placeholder="Maria Silva" required />
+            </div>
+            <div style="margin-bottom:12px">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" placeholder="maria@example.com" required />
+            </div>
+            <button class="btn-primary" type="submit">Salvar Cliente</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Técnicos -->
+    <div id="tecnicos" class="section" style="display:none">
+      <div class="grid">
+        <div class="card">
+          <div class="toolbar">
+            <h3>Lista de Técnicos</h3>
+            <div class="status" id="statusTecnicos">Pronto</div>
+          </div>
+          <div id="tecnicosTableWrap">
+            <table id="tecnicosTable">
+              <thead>
+                <tr><th>ID</th><th>Nome</th><th>Especialidade</th><th>Ações</th></tr>
+              </thead>
+              <tbody id="tecnicosBody">
+                <tr><td colspan="4" class="empty">Carregando...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Novo Técnico</h3>
+          <form id="tecnicoForm">
+            <div style="margin-bottom:12px">
+              <label for="tecnicoNome">Nome</label>
+              <input id="tecnicoNome" name="nome" placeholder="João Silva" required />
+            </div>
+            <div style="margin-bottom:12px">
+              <label for="especialidade">Especialidade</label>
+              <select id="especialidade" name="especialidade" required>
+                <option value="">Selecione...</option>
+                <option value="Hardware">Hardware</option>
+                <option value="Software">Software</option>
+                <option value="Rede">Rede</option>
+                <option value="Segurança">Segurança</option>
+                <option value="Suporte">Suporte</option>
+              </select>
+            </div>
+            <button class="btn-primary" type="submit">Salvar Técnico</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ordens de Serviço -->
+    <div id="ordens" class="section" style="display:none">
+      <div class="grid">
+        <div class="card">
+          <div class="toolbar">
+            <h3>Ordens de Serviço</h3>
+            <div class="status" id="statusOrdens">Pronto</div>
+          </div>
+          <div id="ordensTableWrap">
+            <table id="ordensTable">
+              <thead>
+                <tr><th>ID</th><th>Tipo</th><th>Status</th><th>Cliente</th><th>Técnico</th><th>Ações</th></tr>
+              </thead>
+              <tbody id="ordensBody">
+                <tr><td colspan="6" class="empty">Carregando...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Nova Ordem de Serviço</h3>
+          <form id="ordemForm">
+            <div style="margin-bottom:12px">
+              <label for="ordemTipo">Tipo</label>
+              <select id="ordemTipo" name="tipo" required>
+                <option value="">Selecione...</option>
+                <option value="Corretiva">Corretiva</option>
+                <option value="Preventiva">Preventiva</option>
+                <option value="Instalação">Instalação</option>
+                <option value="Manutenção">Manutenção</option>
+              </select>
+            </div>
+            <div style="margin-bottom:12px">
+              <label for="ordemCliente">Cliente</label>
+              <select id="ordemCliente" name="cliente" required>
+                <option value="">Selecione...</option>
+              </select>
+            </div>
+            <div style="margin-bottom:12px">
+              <label for="ordemTecnico">Técnico</label>
+              <select id="ordemTecnico" name="tecnico" required>
+                <option value="">Selecione...</option>
+              </select>
+            </div>
+            <div style="margin-bottom:12px">
+              <label for="ordemHoras">Horas Estimadas</label>
+              <input id="ordemHoras" name="horas" type="number" min="1" placeholder="2" required />
+            </div>
+            <button class="btn-primary" type="submit">Criar Ordem</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const $ = (s) => document.querySelector(s);
+    const toast = (msg) => {
+      const el = $("#toast");
+      el.textContent = msg;
+      el.style.display = "block";
+      setTimeout(() => el.style.display = "none", 3000);
+    };
+
+    // ===== LOCAL STORAGE MANAGER =====
+    const StorageManager = {
+      // Chaves do localStorage
+      keys: {
+        clientes: 'sgs_clientes',
+        tecnicos: 'sgs_tecnicos',
+        ordens: 'sgs_ordens'
+      },
+
+      // Gerar ID único
+      generateId(key) {
+        const data = this.load(key);
+        if (data.length === 0) return 1;
+        const maxId = Math.max(...data.map(item => item.id || 0));
+        return maxId + 1;
+      },
+
+      // Carregar dados
+      load(key) {
+        try {
+          const data = localStorage.getItem(this.keys[key]);
+          return data ? JSON.parse(data) : [];
+        } catch (e) {
+          console.error(`Erro ao carregar ${key}:`, e);
+          return [];
+        }
+      },
+
+      // Salvar dados
+      save(key, data) {
+        try {
+          localStorage.setItem(this.keys[key], JSON.stringify(data));
+          return true;
+        } catch (e) {
+          console.error(`Erro ao salvar ${key}:`, e);
+          return false;
+        }
+      },
+
+      // Adicionar item
+      add(key, item) {
+        const data = this.load(key);
+        item.id = this.generateId(key);
+        data.push(item);
+        this.save(key, data);
+        return item;
+      },
+
+      // Atualizar item
+      update(key, id, updates) {
+        const data = this.load(key);
+        const index = data.findIndex(item => item.id == id);
+        if (index !== -1) {
+          data[index] = { ...data[index], ...updates };
+          this.save(key, data);
+          return data[index];
+        }
+        return null;
+      },
+
+      // Remover item
+      remove(key, id) {
+        const data = this.load(key);
+        const filtered = data.filter(item => item.id != id);
+        this.save(key, filtered);
+        return filtered.length !== data.length;
+      },
+
+      // Buscar por ID
+      find(key, id) {
+        const data = this.load(key);
+        return data.find(item => item.id == id);
+      }
+    };
+
+    // ===== FUNÇÕES DE NAVEGAÇÃO =====
+    function showSection(sectionName) {
+      // Esconder todas as seções
+      document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+      // Mostrar a seção selecionada
+      $(`#${sectionName}`).style.display = 'block';
+      
+      // Atualizar navegação
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      // Carregar dados da seção
+      switch(sectionName) {
+        case 'dashboard': loadDashboard(); break;
+        case 'clientes': fetchClientes(); break;
+        case 'tecnicos': fetchTecnicos(); break;
+        case 'ordens': fetchOrdens(); break;
+      }
+    }
+
+    // ===== DASHBOARD =====
+    function loadDashboard() {
+      const clientes = StorageManager.load('clientes');
+      const tecnicos = StorageManager.load('tecnicos');
+      const ordens = StorageManager.load('ordens');
+
+      // Atualizar estatísticas
+      $("#totalClientes").textContent = clientes.length;
+      $("#totalTecnicos").textContent = tecnicos.length;
+      $("#ordensAbertas").textContent = ordens.filter(o => o.status === 'Aberto').length;
+      $("#ordensResolvidas").textContent = ordens.filter(o => o.status === 'Resolvido').length;
+
+      // Últimas ordens
+      if (ordens.length === 0) {
+        $("#ultimasOrdens").innerHTML = '<div class="empty">Nenhuma ordem encontrada</div>';
+      } else {
+        const ultimasOrdens = ordens.slice(-5).reverse(); // Últimas 5, mais recentes primeiro
+        $("#ultimasOrdens").innerHTML = `
+          <table>
+            <thead><tr><th>ID</th><th>Tipo</th><th>Status</th><th>Cliente</th></tr></thead>
+            <tbody>
+              ${ultimasOrdens.map(o => {
+                const cliente = StorageManager.find('clientes', o.clienteId);
+                return `
+                  <tr>
+                    <td><span class="pill">#${o.id}</span></td>
+                    <td>${o.tipo}</td>
+                    <td><span class="status-badge status-${o.status.toLowerCase().replace(' ', '-')}">${o.status}</span></td>
+                    <td>${cliente ? cliente.nome : 'Cliente não encontrado'}</td>
+                  </tr>
+                `;
+              }).join('')}
+            </tbody>
+          </table>
+        `;
+      }
+    }
+
+    // ===== CLIENTES =====
+    function fetchClientes() {
+      $("#statusClientes").textContent = "Carregando...";
+      const clientes = StorageManager.load('clientes');
+      
+      if (clientes.length === 0) {
+        $("#clientesBody").innerHTML = '<tr><td colspan="4" class="empty">Sem clientes cadastrados</td></tr>';
+      } else {
+        $("#clientesBody").innerHTML = clientes.map(c => `
+          <tr>
+            <td><span class="pill">#${c.id}</span></td>
+            <td>${c.nome}</td>
+            <td>${c.email}</td>
+            <td>
+              <button class="btn" onclick="editarCliente(${c.id})">Editar</button>
+              <button class="btn-danger" onclick="excluirCliente(${c.id})">Excluir</button>
+            </td>
+          </tr>
+        `).join("");
+      }
+      $("#statusClientes").textContent = "OK";
+    }
+
+    // ===== TÉCNICOS =====
+    function fetchTecnicos() {
+      $("#statusTecnicos").textContent = "Carregando...";
+      const tecnicos = StorageManager.load('tecnicos');
+      
+      if (tecnicos.length === 0) {
+        $("#tecnicosBody").innerHTML = '<tr><td colspan="4" class="empty">Sem técnicos cadastrados</td></tr>';
+      } else {
+        $("#tecnicosBody").innerHTML = tecnicos.map(t => `
+          <tr>
+            <td><span class="pill">#${t.id}</span></td>
+            <td>${t.nome}</td>
+            <td>${t.especialidade}</td>
+            <td>
+              <button class="btn" onclick="editarTecnico(${t.id})">Editar</button>
+              <button class="btn-danger" onclick="excluirTecnico(${t.id})">Excluir</button>
+            </td>
+          </tr>
+        `).join("");
+      }
+      $("#statusTecnicos").textContent = "OK";
+    }
+
+    // ===== ORDENS =====
+    function fetchOrdens() {
+      $("#statusOrdens").textContent = "Carregando...";
+      const ordens = StorageManager.load('ordens');
+      
+      if (ordens.length === 0) {
+        $("#ordensBody").innerHTML = '<tr><td colspan="6" class="empty">Sem ordens cadastradas</td></tr>';
+      } else {
+        $("#ordensBody").innerHTML = ordens.map(o => {
+          const cliente = StorageManager.find('clientes', o.clienteId);
+          const tecnico = StorageManager.find('tecnicos', o.tecnicoId);
+          return `
+            <tr>
+              <td><span class="pill">#${o.id}</span></td>
+              <td>${o.tipo}</td>
+              <td><span class="status-badge status-${o.status.toLowerCase().replace(' ', '-')}">${o.status}</span></td>
+              <td>${cliente ? cliente.nome : 'Cliente não encontrado'}</td>
+              <td>${tecnico ? tecnico.nome : 'Técnico não encontrado'}</td>
+              <td>
+                <button class="btn-warning" onclick="mudarStatus(${o.id})">Mudar Status</button>
+                <button class="btn-danger" onclick="excluirOrdem(${o.id})">Excluir</button>
+              </td>
+            </tr>
+          `;
+        }).join("");
+      }
+      $("#statusOrdens").textContent = "OK";
+    }
+
+    // ===== CARREGAR SELECTS =====
+    function carregarSelects() {
+      const clientes = StorageManager.load('clientes');
+      const tecnicos = StorageManager.load('tecnicos');
+
+      $("#ordemCliente").innerHTML = '<option value="">Selecione...</option>' + 
+        clientes.map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
+      
+      $("#ordemTecnico").innerHTML = '<option value="">Selecione...</option>' + 
+        tecnicos.map(t => `<option value="${t.id}">${t.nome} (${t.especialidade})</option>`).join('');
+    }
+
+    // ===== EVENTOS =====
+    $("#clienteForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const nome = $("#nome").value.trim();
+      const email = $("#email").value.trim();
+      if (!nome || !email) return toast("Preencha nome e email.");
+      
+      try {
+        StorageManager.add('clientes', { nome, email });
+        toast("Cliente salvo com sucesso!");
+        $("#nome").value = "";
+        $("#email").value = "";
+        await fetchClientes();
+        await loadDashboard();
+        carregarSelects();
+      } catch (err) {
+        toast("Erro ao salvar cliente: " + err.message);
+      }
+    });
+
+    $("#tecnicoForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const nome = $("#tecnicoNome").value.trim();
+      const especialidade = $("#especialidade").value;
+      if (!nome || !especialidade) return toast("Preencha todos os campos.");
+      
+      try {
+        StorageManager.add('tecnicos', { nome, especialidade });
+        toast("Técnico salvo com sucesso!");
+        $("#tecnicoNome").value = "";
+        $("#especialidade").value = "";
+        await fetchTecnicos();
+        await loadDashboard();
+        carregarSelects();
+      } catch (err) {
+        toast("Erro ao salvar técnico: " + err.message);
+      }
+    });
+
+    $("#ordemForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const tipo = $("#ordemTipo").value;
+      const clienteId = $("#ordemCliente").value;
+      const tecnicoId = $("#ordemTecnico").value;
+      const horas = $("#ordemHoras").value;
+      
+      if (!tipo || !clienteId || !tecnicoId || !horas) return toast("Preencha todos os campos.");
+      
+      try {
+        StorageManager.add('ordens', { 
+          tipo, 
+          clienteId: parseInt(clienteId), 
+          tecnicoId: parseInt(tecnicoId), 
+          horas: parseInt(horas),
+          status: "Aberto",
+          dataCriacao: new Date().toISOString()
+        });
+        toast("Ordem criada com sucesso!");
+        $("#ordemTipo").value = "";
+        $("#ordemCliente").value = "";
+        $("#ordemTecnico").value = "";
+        $("#ordemHoras").value = "";
+        await fetchOrdens();
+        await loadDashboard();
+      } catch (err) {
+        toast("Erro ao criar ordem: " + err.message);
+      }
+    });
+
+    // ===== FUNÇÕES DE EDIÇÃO/EXCLUSÃO =====
+    function editarCliente(id) {
+      console.log('Editando cliente:', id);
+      const cliente = StorageManager.find('clientes', id);
+      if (cliente) {
+        $("#nome").value = cliente.nome;
+        $("#email").value = cliente.email;
+        toast("Preencha os dados e clique em 'Salvar Cliente' para atualizar");
+      } else {
+        toast("Cliente não encontrado!");
+      }
+    }
+
+    function excluirCliente(id) {
+      console.log('Excluindo cliente:', id);
+      if (confirm("Tem certeza que deseja excluir este cliente?")) {
+        // Verificar se há ordens vinculadas
+        const ordens = StorageManager.load('ordens');
+        const ordensVinculadas = ordens.filter(o => o.clienteId == id);
+        
+        if (ordensVinculadas.length > 0) {
+          toast("Não é possível excluir cliente com ordens de serviço vinculadas!");
+          return;
+        }
+        
+        const sucesso = StorageManager.remove('clientes', id);
+        if (sucesso) {
+          toast("Cliente excluído com sucesso!");
+          fetchClientes();
+          loadDashboard();
+          carregarSelects();
+        } else {
+          toast("Erro ao excluir cliente!");
+        }
+      }
+    }
+
+    function editarTecnico(id) {
+      console.log('Editando técnico:', id);
+      const tecnico = StorageManager.find('tecnicos', id);
+      if (tecnico) {
+        $("#tecnicoNome").value = tecnico.nome;
+        $("#especialidade").value = tecnico.especialidade;
+        toast("Preencha os dados e clique em 'Salvar Técnico' para atualizar");
+      } else {
+        toast("Técnico não encontrado!");
+      }
+    }
+
+    function excluirTecnico(id) {
+      console.log('Excluindo técnico:', id);
+      if (confirm("Tem certeza que deseja excluir este técnico?")) {
+        // Verificar se há ordens vinculadas
+        const ordens = StorageManager.load('ordens');
+        const ordensVinculadas = ordens.filter(o => o.tecnicoId == id);
+        
+        if (ordensVinculadas.length > 0) {
+          toast("Não é possível excluir técnico com ordens de serviço vinculadas!");
+          return;
+        }
+        
+        const sucesso = StorageManager.remove('tecnicos', id);
+        if (sucesso) {
+          toast("Técnico excluído com sucesso!");
+          fetchTecnicos();
+          loadDashboard();
+          carregarSelects();
+        } else {
+          toast("Erro ao excluir técnico!");
+        }
+      }
+    }
+
+    function mudarStatus(id) {
+      console.log('Mudando status da ordem:', id);
+      const ordem = StorageManager.find('ordens', id);
+      if (ordem) {
+        const statuses = ['Aberto', 'Em Andamento', 'Resolvido', 'Fechado'];
+        const currentIndex = statuses.indexOf(ordem.status);
+        const nextIndex = (currentIndex + 1) % statuses.length;
+        const novoStatus = statuses[nextIndex];
+        
+        const sucesso = StorageManager.update('ordens', id, { 
+          status: novoStatus,
+          dataAtualizacao: new Date().toISOString()
+        });
+        
+        if (sucesso) {
+          toast(`Status alterado para: ${novoStatus}`);
+          fetchOrdens();
+          loadDashboard();
+        } else {
+          toast("Erro ao alterar status!");
+        }
+      } else {
+        toast("Ordem não encontrada!");
+      }
+    }
+
+    function excluirOrdem(id) {
+      console.log('Excluindo ordem:', id);
+      if (confirm("Tem certeza que deseja excluir esta ordem de serviço?")) {
+        const sucesso = StorageManager.remove('ordens', id);
+        if (sucesso) {
+          toast("Ordem excluída com sucesso!");
+          fetchOrdens();
+          loadDashboard();
+        } else {
+          toast("Erro ao excluir ordem!");
+        }
+      }
+    }
+
+    // ===== INICIALIZAÇÃO =====
+    document.addEventListener('DOMContentLoaded', () => {
+      // Limpar localStorage antigo se necessário
+      const limparStorage = confirm("Deseja limpar os dados antigos para corrigir os IDs?");
+      if (limparStorage) {
+        localStorage.removeItem('sgs_clientes');
+        localStorage.removeItem('sgs_tecnicos');
+        localStorage.removeItem('sgs_ordens');
+        toast("Dados limpos! Cadastre novos clientes e técnicos.");
+      }
+      
+      // Carregar dashboard inicial
+      loadDashboard();
+      carregarSelects();
+      
+      // Configurar navegação
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const section = e.target.getAttribute('data-section');
+          if (section) showSection(section);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
